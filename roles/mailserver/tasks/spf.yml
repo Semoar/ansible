@@ -1,0 +1,3 @@
+---
+- name: SPF - Installation
+  apt: pkg=postfix-policyd-spf-python state=latest

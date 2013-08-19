@@ -1,0 +1,20 @@
+---
+- name: ClamAV - installation
+  apt: pkg=$item state=latest
+  with_items:
+    - clamsmtp
+    - clamav-freshclam
+    - clamav-daemon
+
+- name: ClamSMTPd - Configuration
+  template: src=etc_clamsmtpd.conf.j2 dest=/etc/clamsmtpd.conf owner=clamsmtp group=root mode=0660
+  notify: restart clamsmtp
+
+- name: ClamSMTPd - Daemon start
+  service: name=clamsmtp state=started pattern=/usr/sbin/clamsmtpd
+
+- name: ClamAV - Daemon service
+  service: name=clamav-daemon state=started
+
+- name: ClamAV - Freshclam service
+  service: name=clamav-freshclam state=started

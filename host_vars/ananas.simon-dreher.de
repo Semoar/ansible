@@ -1,0 +1,4 @@
+---
+#mx_smtp_relayto: babaco.simon-dreher.de
+#mx_smtp_relaydomains: ['simon-dreher.de']
+

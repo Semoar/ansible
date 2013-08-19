@@ -1,0 +1,24 @@
+---
+- name: SpamAssassin - Installation
+  apt: pkg=$item state=latest
+  only_if: "${mx_spamassassin_enabled} "
+  with_items:
+    - spamassassin
+    - spampd
+
+- name: SpamAssassin - Daemon configuration
+  template: src=etc_default_spampd.j2 dest=/etc/default/spampd owner=root group=root mode=0644
+  only_if: "${mx_spamassassin_enabled} "
+  notify: restart spamassassin
+
+- name: SpamAssassin - Compiled rules support
+  lineinfile: dest=/etc/spamassassin/v320.pre regexp="^#? ?loadplugin.*Rule2XSBody" line="loadplugin Mail::SpamAssassin::Plugin::Rule2XSBody"
+
+- name: SpamAssassin - Spam learning cron
+  cron: name="sa-learn-spam" minute="0" job="/usr/bin/sa-learn --spam /home/*/Maildir/.INBOX.Junk > /dev/null"
+
+- name: SpamAssassin - Ham learning cron
+  cron: name="sa-learn-ham" minute="30" job="/usr/bin/sa-learn --ham /home/*/Maildir/.INBOX.NotJunk > /dev/null"
+
+- name: SpamAssassin - Rules update cron
+  cron: name="sa-update" hour="2" minute="0" job="/usr/bin/sa-update > /dev/null && /usr/bin/sa-compile > /dev/null 2>&1"

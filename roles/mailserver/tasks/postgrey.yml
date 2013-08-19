@@ -1,0 +1,7 @@
+---
+- name: Postgrey - Installation
+  apt: pkg=postgrey state=latest
+
+- name: Postgrey - configuration
+  template: src=etc_default_postgrey.j2 dest=/etc/default/postgrey owner=root group=root mode=0644
+  notify: restart postgrey

@@ -1,0 +1,8 @@
+---
+- hosts: mailservers
+  vars_files:
+    - host_vars/{{ inventory_hostname }}
+  user: simon
+  sudo: yes
+  roles:
+    - mailserver

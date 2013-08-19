@@ -1,0 +1,18 @@
+---
+- name: DKIM - Installation
+  apt: pkg=$item state=latest
+  with_items:
+    - opendkim
+    - opendkim-tools
+  ignore_errors: yes
+
+- name: DKIM - Lib directory
+  file: path=/var/lib/dkim state=directory owner=root group=root mode=0755
+
+- name: DKIM - Private key
+  copy: src=secure/${ansible_domain}.private dest=/var/lib/dkim/default.private owner=root group=root mode=0640
+  notify: restart opendkim
+
+- name: DKIM - Configuration
+  template: src=etc_opendkim.conf.j2 dest=/etc/opendkim.conf owner=root group=root mode=0644
+  notify: restart opendkim

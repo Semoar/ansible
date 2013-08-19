@@ -1,0 +1,57 @@
+---
+mx_clamav_enabled: True
+mx_postgrey_enabled: True
+mx_spamassassin_enabled: True
+mx_dkim_enabled: False
+mx_spf_enabled: True
+mx_sasl_enabled: True
+mx_tls_enabled: True
+mx_rbl_enabled: True
+mx_dovecot_enabled: True
+
+mx_smtp_banner: "Welcome here at simon-dreher.de"
+mx_smtp_mydestination: []
+
+# Senders from mynetworks are trusted always
+mx_smtp_mynetworks: []
+mx_smtp_recipientdelimiter: "+"
+mx_smtp_inetinterfaces: ["all"]
+mx_smtp_inetprotocols: ["ipv4", "ipv6"]
+mx_smtp_queuelifetime: "10d"
+mx_smtp_messagesizelimit: 15728640
+
+# Enter domain and server this is the backup server for.
+mx_smtp_relayto: example.org
+mx_smtp_relaydomains: []
+
+# Port used for filters like SpamAssassin etc. Depending on how much are activated 
+# the 1 to 3 following ports are used, too.
+mx_postfix_contentfilter: 10025
+mx_aliases: [
+    ['postmaster', 'root'],
+    ['abuse', 'postmaster'],
+    ['webmaster', 'root'],
+    ['admin', 'root'],
+    ['root', 'simon'],
+]
+mx_aliases_pcre: [
+    ['/^root\./', 'root'],
+]
+mx_clamav_bounce: False
+mx_clamav_quarantine: True
+mx_clamav_updatefreq: "*/4"
+mx_spf_timelimit: 3600
+mx_rbl_servers: ['bl.spamcop.net', 'cbl.abuseat.org', 'sbl-xbl.spamhaus.org']
+mx_whitelist: []
+mx_blacklist: []
+mx_postgrey_port: 10023
+mx_postgrey_delay: 300
+mx_postgrey_maxage: 35
+mx_postgrey_text: "Good news, everyone ! I taught the mail server to detect spambots."
+mx_dovecot_sieve: True
+mx_dovecot_managesieveport: 4190
+mx_dovecot_imap_listen: ['*', '::']
+mx_dovecot_imap_greeting: 'Shut up and take my emails !'
+mx_dovecot_maildirs: '/home/%u'
+mx_dovecot_passwd: True
+mx_dovecot_passwdfile: /etc/dovecot/passwd

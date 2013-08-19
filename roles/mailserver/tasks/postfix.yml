@@ -1,0 +1,21 @@
+---
+- name: Postfix - Installation
+  apt: pkg=$item state=latest
+  with_items:
+    - postfix
+    - postfix-pcre
+
+- name: Postfix - Aliases
+  template: src=etc_aliases.j2 dest=/etc/aliases owner=root group=root mode=0644
+  notify: postfix aliases
+
+- name: Postfix - PCRE aliases
+  template: src=etc_aliases-pcre.j2 dest=/etc/aliases-pcre owner=root group=root mode=0644
+
+- name: Postfix - Configuration (main.cf)
+  template: src=etc_postfix_main.cf.j2 dest=/etc/postfix/main.cf owner=root group=root mode=0644
+  notify: restart postfix
+
+- name: Postfix - Configuration (master.cf)
+  template: src=etc_postfix_master.cf.j2 dest=/etc/postfix/master.cf owner=root group=root mode=0644
+  notify: restart postfix

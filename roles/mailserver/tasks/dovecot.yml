@@ -1,0 +1,21 @@
+---
+- name: Dovecot - Installation
+  apt: pkg=$item state=latest
+  with_items:
+    - dovecot-imapd
+    - dovecot-sieve
+    - dovecot-managesieved
+
+- name: Dovecot - SSL conf
+  template: src=etc_ssl_dovecot.cnf dest=/etc/ssl/dovecot.cnf mode=0600 owner=root group=root
+
+- name: Dovecot - SSL cert
+  command: /usr/bin/openssl req -new -x509 -nodes -config /etc/ssl/dovecot.cnf -out /etc/ssl/certs/dovecot.pem -keyout /etc/ssl/private/dovecot.pem -days 365 creates=/etc/ssl/certs/dovecot.pem
+
+- name: Dovecot - Configuration
+  template: src=etc_dovecot_dovecot.conf.j2 dest=/etc/dovecot/dovecot.conf owner=root group=root mode=0644
+  notify: restart dovecot
+
+- name: Dovecot - Passwd file
+  copy: src=secure/dovecot.passwd dest=${mx_dovecot_passwdfile} owner=dovecot group=postfix mode=0440
+  only_if: "${mx_dovecot_passwd}"

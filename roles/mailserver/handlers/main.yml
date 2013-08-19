@@ -1,0 +1,27 @@
+---
+- name: restart postfix
+  service: name=postfix state=restarted
+
+- name: postfix aliases
+  command: /usr/sbin/postalias /etc/aliases
+
+- name: restart clamsmtp
+  service: name=clamsmtp state=restarted pattern=/usr/sbin/clamsmtpd
+
+- name: restart spamassassin
+  service: name=spampd state=restarted
+
+- name: restart opendkim
+  service: name=opendkim state=restarted
+
+- name: restart postgrey
+  service: name=postgrey state=restarted
+
+- name: restart dovecot
+  service: name=dovecot state=restarted
+
+- name: rehash whitelist
+  command: /usr/sbin/postmap /etc/postfix/whitelist
+
+- name: rehash blacklist
+  command: /usr/sbin/postmap /etc/postfix/blacklist

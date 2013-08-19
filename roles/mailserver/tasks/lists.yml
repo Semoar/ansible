@@ -1,0 +1,8 @@
+---
+- name: Blacklist
+  template: src=etc_postfix_blacklist.j2 dest=/etc/postfix/blacklist owner=root group=root mode=0644
+  notify: rehash blacklist
+
+- name: Whitelist
+  template: src=etc_postfix_whitelist.j2 dest=/etc/postfix/whitelist owner=root group=root mode=0644
+  notify: rehash whitelist
